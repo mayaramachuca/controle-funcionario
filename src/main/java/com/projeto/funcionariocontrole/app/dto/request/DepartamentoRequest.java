@@ -1,16 +1,21 @@
-package com.projeto.funcionariocontrole.app.dto;
+package com.projeto.funcionariocontrole.app.dto.request;
 
-import com.projeto.funcionariocontrole.domain.entities.Departamento;
-import com.projeto.funcionariocontrole.domain.entities.Funcionario;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Builder
 public class DepartamentoRequest {
+    @NotBlank
+    @Size(min=2, max=100)
     private String nome;
+    @NotBlank
+    @Size(min=2, max=100)
     private String descricao;
+    @NotNull
     private BigDecimal budget;
 }

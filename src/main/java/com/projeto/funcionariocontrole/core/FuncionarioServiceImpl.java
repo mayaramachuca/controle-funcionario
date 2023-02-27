@@ -1,4 +1,4 @@
-package com.projeto.funcionariocontrole.core.serviceImpl;
+package com.projeto.funcionariocontrole.core;
 
 import com.projeto.funcionariocontrole.domain.constant.StatusFuncionario;
 import com.projeto.funcionariocontrole.domain.entities.Funcionario;
@@ -21,13 +21,13 @@ import java.util.Optional;
 @Service("funcionarioService")
 public class FuncionarioServiceImpl implements FuncionarioService {
     @Autowired
-    FuncionarioRepository funcionarioRepository;
+    private FuncionarioRepository funcionarioRepository;
 
     @Override
     public  Optional<Funcionario> getFuncionarioId(Long id){
         Optional<Funcionario> funcionario = funcionarioRepository.findById(id);
         if(funcionario.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new FuncionarioNaoEncontradoException("Funcionário não encontrado!");
         }
         return funcionario;
     }

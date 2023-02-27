@@ -1,7 +1,5 @@
-package com.projeto.funcionariocontrole.app.dto;
+package com.projeto.funcionariocontrole.app.dto.response;
 
-import com.projeto.funcionariocontrole.domain.entities.Departamento;
-import com.projeto.funcionariocontrole.domain.entities.Funcionario;
 import lombok.*;
 
 import java.math.BigDecimal;

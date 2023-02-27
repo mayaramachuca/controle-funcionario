@@ -1,4 +1,4 @@
-package com.projeto.funcionariocontrole;
+package com.projeto.funcionariocontrole.domain;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

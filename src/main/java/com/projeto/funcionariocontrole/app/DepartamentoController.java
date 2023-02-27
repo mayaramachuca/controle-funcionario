@@ -1,10 +1,10 @@
-package com.projeto.funcionariocontrole.app.controller;
+package com.projeto.funcionariocontrole.app;
 
 import com.projeto.funcionariocontrole.app.dto.request.DepartamentoRequest;
 import com.projeto.funcionariocontrole.app.dto.response.DepartamentoResponse;
 import com.projeto.funcionariocontrole.core.mapper.DepartamentoMapper;
-import com.projeto.funcionariocontrole.core.serviceImpl.DepartamentoServiceImpl;
 import com.projeto.funcionariocontrole.domain.entities.Departamento;
+import com.projeto.funcionariocontrole.domain.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +20,17 @@ public class DepartamentoController {
     @Autowired
     public DepartamentoMapper departamentoMapper;
     @Autowired
-    public DepartamentoServiceImpl departamentoImp;
+    public DepartamentoService service;
 
     @PostMapping
     public DepartamentoResponse createDepartamento(@Valid @RequestBody DepartamentoRequest departamentoRequest){
-        Departamento departamento =  departamentoImp.save(toEntity(departamentoRequest));
+        Departamento departamento =  service.save(toEntity(departamentoRequest));
         return departamentoMapper.toDto(departamento);
     }
 
     @GetMapping(value = "/{id}")
     public DepartamentoResponse getDepartamento(@PathVariable("id")Long id) {
-        Departamento departamento = departamentoImp.getDepartamentoId(id);
+        Departamento departamento = service.getDepartamentoId(id);
         var departamentoResponse = departamentoMapper.toDto(departamento);
         return departamentoResponse;
     }
@@ -38,7 +38,7 @@ public class DepartamentoController {
     @GetMapping(value = "/todos")
     public List<DepartamentoResponse> listarDepartamentos() {
 
-        return departamentoMapper.toListDto(departamentoImp.getAllDepartamento());
+        return departamentoMapper.toListDto(service.getAllDepartamento());
     }
 
 }

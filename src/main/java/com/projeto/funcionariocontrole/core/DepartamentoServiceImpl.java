@@ -1,4 +1,4 @@
-package com.projeto.funcionariocontrole.core.serviceImpl;
+package com.projeto.funcionariocontrole.core;
 
 import com.projeto.funcionariocontrole.domain.entities.Departamento;
 import com.projeto.funcionariocontrole.domain.exception.DepartamentoJaRegistradoException;
@@ -31,6 +31,7 @@ public class DepartamentoServiceImpl implements DepartamentoService {
 
     @Override
     public List<Departamento> getAllDepartamento() {
+
         return departamentoRepository.findAll();
     }
 

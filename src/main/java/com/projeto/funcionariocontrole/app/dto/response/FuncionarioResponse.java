@@ -1,7 +1,5 @@
-package com.projeto.funcionariocontrole.app.dto;
+package com.projeto.funcionariocontrole.app.dto.response;
 
-import com.projeto.funcionariocontrole.domain.entities.Departamento;
-import com.projeto.funcionariocontrole.domain.entities.Funcionario;
 import com.projeto.funcionariocontrole.domain.constant.StatusFuncionario;
 import lombok.*;
 
@@ -14,6 +12,6 @@ public class FuncionarioResponse {
     private String nome;
     private String dataAniversario;
     private BigDecimal salario;
-    private Long IdDepartamento;
+    private Long idDepartamento;
     private StatusFuncionario status;
 }

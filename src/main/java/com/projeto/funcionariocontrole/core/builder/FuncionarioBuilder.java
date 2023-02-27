@@ -1,30 +1,26 @@
-package com.projeto.funcionariocontrole.domain.entities;
+package com.projeto.funcionariocontrole.core.builder;
 
 import com.projeto.funcionariocontrole.domain.constant.StatusFuncionario;
+import com.projeto.funcionariocontrole.domain.entities.Departamento;
+import com.projeto.funcionariocontrole.domain.entities.Funcionario;
 import lombok.*;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
-@Entity
-@Table(name="funcionarios")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Funcionario {
+@Builder
+public class FuncionarioBuilder {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //valor para o identificador é gerado aut. para cada registro inserido no banco
     private Long id;
-    @Column(name = "CPF" , nullable = false , unique = true)
     private String cpf;
     private String nome;
     private String dataAniversario;
     private BigDecimal salario;
-    @ManyToOne
-    @JoinColumn(name = "id_departamento",referencedColumnName = "id",nullable = false)
     private Departamento departamento;
     private StatusFuncionario status;
 
+    private LocalDate dataRejeicao;
+    public Funcionario toEntity(){
+        return new Funcionario(id, cpf, nome, dataAniversario, salario, departamento, status, dataRejeicao);
+    }
 }
