@@ -6,6 +6,9 @@ import com.projeto.funcionariocontrole.core.mapper.FuncionarioMapper;
 import com.projeto.funcionariocontrole.domain.constant.StatusFuncionario;
 import com.projeto.funcionariocontrole.domain.entities.Departamento;
 import com.projeto.funcionariocontrole.domain.entities.Funcionario;
+import com.projeto.funcionariocontrole.domain.exception.CpfJaRegistradoException;
+import com.projeto.funcionariocontrole.domain.exception.FuncionarioNaoEncontradoException;
+import com.projeto.funcionariocontrole.domain.exception.OrcamentoInsuficienteException;
 import com.projeto.funcionariocontrole.domain.service.FuncionarioService;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +29,7 @@ import java.util.Optional;
 
 import static com.projeto.funcionariocontrole.utils.JsonConvertionUtils.asJsonString;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,9 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(MockitoJUnitRunner.class)
 public class FuncionarioControllerTest {
 
-    // private final String FUNCIONARIOS = "/funcionarios";
     private final Long ID = 1L;
-
     private MockMvc mockMvc;
     @Mock
     private FuncionarioService service;
@@ -130,6 +132,17 @@ public class FuncionarioControllerTest {
     }
 
     @Test
+    public void getFuncionarioNotOk() throws Exception {
+
+        doThrow(FuncionarioNaoEncontradoException.class).when(service).getFuncionarioId(anyLong());
+
+        mockMvc.perform(get("/funcionarios/funcionarioid/" + ID)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
     public void createFuncionarioIsOk() throws Exception {
         Funcionario funcionario = Funcionario
                 .builder()
@@ -182,7 +195,7 @@ public class FuncionarioControllerTest {
     }
 
     @Test
-    public void aumentoSalarioIsOk() throws Exception {
+    public void createFuncionarioIdNotOk() throws Exception {
         Funcionario funcionario = Funcionario
                 .builder()
                 .cpf("12345678900")
@@ -195,32 +208,49 @@ public class FuncionarioControllerTest {
                 .salario(BigDecimal.valueOf(1000.00))
                 .build();
 
-        FuncionarioRequest funcionarioRequest = FuncionarioRequest
+        doThrow(CpfJaRegistradoException.class).when(service).save(funcionario);
+
+        mockMvc.perform(post("/funcionarios")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void aumentoSalarioIsOk() throws Exception {
+        Funcionario funcionario = Funcionario
                 .builder()
                 .cpf("36974253826")
                 .dataAniversario("27/02/2023")
                 .nome("jose")
+                .departamento(Departamento
+                        .builder()
+                        .budget(BigDecimal.valueOf(3000.00))
+                        .totalSalarios(BigDecimal.TEN)
+                        .id(1l)
+                        .build())
+                .id(1l)
+                .status(StatusFuncionario.ATIVO)
+                .dataRejeicao(LocalDate.now())
                 .salario(BigDecimal.valueOf(1000.00))
-                .idDepartamento(1l)
                 .build();
 
         FuncionarioResponse funcionarioResponse = FuncionarioResponse
                 .builder()
                 .id(1l)
-                .cpf("12345678900")
+                .cpf("36974253826")
                 .dataAniversario("27/02/2023")
                 .nome("jose")
-                .salario(BigDecimal.valueOf(1000.00))
+                .salario(BigDecimal.valueOf(1500.00))
                 .idDepartamento(1l)
                 .status(StatusFuncionario.ATIVO)
                 .build();
 
-        when(service.aumentoSalario(anyLong(), any())).thenReturn(funcionario);
-        when(funcionarioMapper.toDto(funcionario)).thenReturn(funcionarioResponse);
+        when(service.aumentoSalario(any(),any())).thenReturn(funcionario);
+        when(funcionarioMapper.toDto(any())).thenReturn(funcionarioResponse);
 
-        mockMvc.perform(put("/funcionarios/aumento/" + ID.toString())
+        mockMvc.perform(put("/funcionarios/aumento/"+ ID.toString())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(funcionarioResponse)))
+                        .content(BigDecimal.valueOf(500.00).toString()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(funcionarioResponse.getId()))
                 .andExpect(jsonPath("$.cpf").value(funcionarioResponse.getCpf()))
@@ -228,6 +258,17 @@ public class FuncionarioControllerTest {
                 .andExpect(jsonPath("$.dataAniversario").value(funcionarioResponse.getDataAniversario()))
                 .andExpect(jsonPath("$.salario").value(funcionarioResponse.getSalario()))
                 .andExpect(jsonPath("$.status").value(funcionarioResponse.getStatus().toString()))
-                .andExpect(jsonPath("$.idDepartamento").value(funcionarioResponse.getIdDepartamento()));
+                .andExpect(jsonPath("$.idDepartamento").value(funcionarioResponse.getIdDepartamento()))
+                .andReturn();
+    }
+
+    @Test
+    public void aumentoSalarioIsBadRequestOrcamento() throws Exception {
+
+        doThrow(OrcamentoInsuficienteException.class).when(service).aumentoSalario(any(),any());
+        mockMvc.perform(put("/funcionarios/aumento/" + ID.toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 }

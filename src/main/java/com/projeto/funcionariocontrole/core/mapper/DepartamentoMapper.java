@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public final class DepartamentoMapper {
+public class DepartamentoMapper {
 
     private DepartamentoMapper(){
     }
 
-    public static Departamento toEntity(DepartamentoRequest departamentoRequest){
+    public Departamento toEntity(DepartamentoRequest departamentoRequest){
         return DepartamentoBuilder.builder()
                 .nome(departamentoRequest.getNome())
                 .totalSalarios(BigDecimal.ZERO)

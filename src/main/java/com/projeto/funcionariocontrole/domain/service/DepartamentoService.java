@@ -10,8 +10,6 @@ public interface DepartamentoService {
     List<Departamento> getAllDepartamento();
 
     void deleteDepartamentoNome(String nome);
-
-
  //   Departamento updateDepartamento(Departamento departamento);
 
 }

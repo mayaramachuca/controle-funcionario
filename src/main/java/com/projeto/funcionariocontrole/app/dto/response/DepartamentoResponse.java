@@ -7,6 +7,8 @@ import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DepartamentoResponse {
     private Long id;
     private String nome;

@@ -6,6 +6,7 @@ import com.projeto.funcionariocontrole.core.mapper.DepartamentoMapper;
 import com.projeto.funcionariocontrole.domain.entities.Departamento;
 import com.projeto.funcionariocontrole.domain.service.DepartamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,15 +17,15 @@ import static com.projeto.funcionariocontrole.core.mapper.DepartamentoMapper.*;
 @RestController
 @RequestMapping("departamentos")
 public class DepartamentoController {
-
     @Autowired
     public DepartamentoMapper departamentoMapper;
     @Autowired
     public DepartamentoService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DepartamentoResponse createDepartamento(@Valid @RequestBody DepartamentoRequest departamentoRequest){
-        Departamento departamento =  service.save(toEntity(departamentoRequest));
+        Departamento departamento =  service.save(departamentoMapper.toEntity(departamentoRequest));
         return departamentoMapper.toDto(departamento);
     }
 

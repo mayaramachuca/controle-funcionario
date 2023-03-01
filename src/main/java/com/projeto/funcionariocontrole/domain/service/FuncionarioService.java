@@ -10,9 +10,7 @@ public interface FuncionarioService {
 
         Optional<Funcionario> getFuncionarioId(Long id);
         Funcionario save(Funcionario funcionario);
-    //    Funcionario updateFuncionario(Funcionario funcionario);
         List<Funcionario> getAllFuncionarios();
-       // void deleteFuncionario(Long id);
         Funcionario aumentoSalario(Long id, BigDecimal valorAumento);
-
+//      void deleteFuncionario(Long id);
 }

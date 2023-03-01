@@ -6,6 +6,8 @@ import lombok.*;
 import java.math.BigDecimal;
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class FuncionarioResponse {
     private Long id;
     private String cpf;

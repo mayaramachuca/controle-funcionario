@@ -6,11 +6,9 @@ import com.projeto.funcionariocontrole.domain.exception.CpfJaRegistradoException
 import com.projeto.funcionariocontrole.domain.exception.FuncionarioNaoEncontradoException;
 import com.projeto.funcionariocontrole.domain.exception.OrcamentoInsuficienteException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import com.projeto.funcionariocontrole.domain.repository.FuncionarioRepository;
 import com.projeto.funcionariocontrole.domain.service.FuncionarioService;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,6 +20,7 @@ import java.util.Optional;
 public class FuncionarioServiceImpl implements FuncionarioService {
     @Autowired
     private FuncionarioRepository funcionarioRepository;
+
 
     @Override
     public  Optional<Funcionario> getFuncionarioId(Long id){
@@ -50,29 +49,10 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         return funcionarioRepository.save(funcionario);
     }
 
-
- /*   @Override
-    public Funcionario updateFuncionario(Funcionario funcionario) {
-       Funcionario func = funcionarioRepository.findById(funcionario.getId()).orElseThrow(()-> new FuncionarioNaoEncontradoException("Funcionário não encontrado!"));
-            func.setNome(funcionario.getNome());
-            func.setCpf(funcionario.getCpf());
-            func.setSalario(funcionario.getSalario());
-            func.setStatus(funcionario.getStatus());
-            func.setDataAniversario(funcionario.getDataAniversario());
-
-            return funcionarioRepository.save(func);
-        }*/
-
     @Override
     public List<Funcionario> getAllFuncionarios() {
         return funcionarioRepository.findAll();
     }
-
-   /* @Override
-    public void deleteFuncionario(Long id) {
-        Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(()-> new FuncionarioNaoEncontradoException("Funcionário não cadastrado"));
-        funcionarioRepository.deleteById(funcionario.getId());
-    }*/
 
     @Override
     public Funcionario aumentoSalario(Long id, BigDecimal valorAumento) {
@@ -86,5 +66,11 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         }
         throw new OrcamentoInsuficienteException("Orçamento insuficiente");
     }
+
+    /* @Override
+    public void deleteFuncionario(Long id) {
+        Funcionario funcionario = funcionarioRepository.findById(id).orElseThrow(()-> new FuncionarioNaoEncontradoException("Funcionário não cadastrado"));
+        funcionarioRepository.deleteById(funcionario.getId());
+    }*/
 }
 

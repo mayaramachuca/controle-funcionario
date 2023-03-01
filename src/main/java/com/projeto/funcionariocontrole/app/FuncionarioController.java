@@ -36,13 +36,10 @@ public class FuncionarioController {
         return funcionarioMapper.toDto(funcionario);
     }
 
-
-
     @GetMapping(value = "/todos")
     public List<FuncionarioResponse> listarFuncionarios() {
         return funcionarioMapper.toListDto(service.getAllFuncionarios());
     }
-
 
     @GetMapping(value = "/funcionarioid/{id}")
     public Optional<FuncionarioResponse> getFuncionarioId(@PathVariable("id") Long id) {

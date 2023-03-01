@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DepartamentoRequest {
     @NotBlank
     @Size(min=2, max=100)
